@@ -16,5 +16,8 @@
     "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.20",
     "prettier": "2.8.4"
+  },
+  "dependencies": {
+    "papaparse": "^5.3.2"
   }
 }
