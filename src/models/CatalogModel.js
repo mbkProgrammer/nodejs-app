@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 const asyncForEach = require('../utils/asyncForeach')
 
 class CatalogModel {
@@ -5,8 +7,22 @@ class CatalogModel {
     this.products = []
   }
 
+  async checkExtintance(productData) {
+    let check = false;
+    await asyncForEach(this.products,async(product) => {
+      await asyncForEach(product.Barcodes, (barcode) => {
+        if(productData.Barcodes.includes(barcode)){
+          check = true
+        }
+      })
+    })
+    return check;
+  }
+
   async addProduct(productData) {
-    console.log('productData', productData)
+    if(!(await this.checkExtintance(productData))) {
+      this.products.push(productData)
+    }
   }
 
   async addProducts(catalogData) {
@@ -26,8 +42,9 @@ class CatalogModel {
         (supplierRow) => (supplierRow.ID = productData.SupplierID)
       ).Name
 
-      this.addProduct(productData)
+      await this.addProduct(productData)
     })
+    return this.products
   }
 }
 
